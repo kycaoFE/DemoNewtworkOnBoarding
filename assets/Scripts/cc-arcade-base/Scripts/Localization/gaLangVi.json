@@ -1,0 +1,29 @@
+{
+    "NO_MONEY": "Số dư trong ví không đủ,\nvui lòng nạp thêm để chơi tiếp.",
+    "AUTHEN_FAILED": "Xác thực tài khoản thất bại.",
+    "MISMATCH_DATA": "Dữ liệu không đồng bộ với máy chủ,\nvui lòng thử lại.",
+    "GROUP_MAINTAIN": "Hệ thống đang bảo trì.\nVui lòng quay lại sau.",
+    "ACCOUNT_BLOCKED": "Tài khoản của bạn đã bị khoá,\nvui lòng liên hệ admin.",
+    "EMPTY_HISTORY": "Chưa có dữ liệu",
+    "EMPTY_JP_HISTORY": "Chưa có dữ liệu",
+    "EMPTY_LEADER_BOARD": "Chưa có dữ liệu",
+    "REQUEST_FAIL": "Chưa có dữ liệu",
+    "ANOTHER_ACCOUNT": "Tài khoản của bạn đã\nđăng nhập từ thiết bị khác.",
+    "SYSTEM_ERROR": "Có lỗi xảy ra,\nvui lòng thử lại.",
+    "DISCONNECT": "Đang kết nối...",
+    "NO_PLAYSESSION": "Hệ thống không tìm thấy phiên chơi.",
+    "NETWORK_WARNING": "Đường truyền mạng yếu!",
+    "NETWORK_DIE": "Không thể kết nối tới máy chủ!",
+    "NOT_EXCEEDED_MIN_BET": "Cược dưới mức tối thiểu",
+    "OVER_MAX_BET": "Cược vượt quá mức cho phép",
+    "BET_FAILED": "Cược bị lỗi",
+    "JOIN_GAME_FAILED": "Bạn chưa vào được game",
+    "WALLET_ERROR": "Ví đang lỗi vui lòng thử lại sau",
+    "KICK_INACTIVE_USER": "Bạn bị mời ra khỏi bàn,\ndo không có thao tác trong\nmột khoảng thời gian.",
+    "ERROR_ODDS_CHANGE": "Bảng cược đã thay đổi.\nVui lòng thử lại",
+    "txtNotify": {
+        "message": "{'obj1':{'type':'label', 'str':'%s ', 'color':'#FF0000'}}"
+    },
+    "txtJPNotify": "{'obj1':{'type':'label', 'color':'#FFFFFF', 'str':'Chúc Mừng '}, 'obj2':{'type':'label', 'color':'#FFFF00', 'str':'%s'}, 'obj3':{'type':'label', 'color':'#FFFFFF', 'str':'nổ hũ thắng '}, 'obj4':{'type':'label', 'color':'#FFFFFF', 'str':'%s'}}",
+    "txtJP": "JACKPOT"
+}
