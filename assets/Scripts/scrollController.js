@@ -15,9 +15,9 @@ cc.Class({
 
     // LIFE-CYCLE CALLBACKS:
 
-    onLoad () {},
+    onLoad() { },
 
-    start () {
+    start() {
         this.scrollNode.active = false;
         this.chipValues = [1, 10, 20, 50, 100];
         this.chipCurrent = 0;
@@ -27,30 +27,30 @@ cc.Class({
 
     // update (dt) {},
 
-    nextChip(){
-        this.backButton.interactable= true;
-        if(this.chipCurrent >= this.chipValues.length-1) {
-            this.nextButton.interactable= false;
+    nextChip() {
+        this.backButton.interactable = true;
+        if (this.chipCurrent >= this.chipValues.length - 1) {
+            this.nextButton.interactable = false;
             return;
         }
         this.chipCurrent++;
         this.setValueChip(this.chipValues[this.chipCurrent]);
     },
 
-    backChip(){
-        this.nextButton.interactable= true;
-        if(this.chipCurrent <= 0) {
-            this.backButton.interactable= false;
+    backChip() {
+        this.nextButton.interactable = true;
+        if (this.chipCurrent <= 0) {
+            this.backButton.interactable = false;
             return;
         }
         this.chipCurrent--;
         this.setValueChip(this.chipValues[this.chipCurrent]);
     },
 
-    setValueChip(value){
-        this.chipLabel.string = value+'K';
+    setValueChip(value) {
+        this.chipLabel.string = value + 'K';
         cc.sys.localStorage.setItem('chipCurrent', value)
     },
-    
+
 
 });

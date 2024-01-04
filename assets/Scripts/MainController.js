@@ -1,7 +1,9 @@
 /// <reference path="../../creator.d.ts" />
 
-const SendMessage = require ('sendMessage');
-const ConnectToNetwork = require('connectToNetwork.js');
+import Data from "./data";
+
+const SendMessage = require('sendMessage');
+const Network = require('network');
 const BetStateManager = require('betStateManager')
 
 cc.Class({
@@ -9,58 +11,58 @@ cc.Class({
 
     properties: {
         oddsItemPrefab: cc.Prefab,
-        oddsItemLayout: cc.Node,
-        oddsItemBackground: cc.Node,
+        betBackgroundPools: [cc.Node],
 
-        betPool: cc.Node,
+        betPools: [cc.Node],
 
         uiManager: cc.Node,
     },
 
-    // LIFE-CYCLE CALLBACKS:
-
-    onLoad () {
-        // cc.sys.localStorage.clear();
+    onLoad() {
+        Data.instance = new Data();
     },
 
-    start () {
+    start() {
         this.uiManager = this.uiManager.getComponent('uiManager');
+        this.sendMessage = new SendMessage();
         this.betStateManager = new BetStateManager();
+        this.network = new Network();
     },
 
-    login(){
-        this.connectToNetwork = new ConnectToNetwork();
-        this.connectToNetwork.login(()=>{
+    login() {
+        this.network.login(() => {
             this.uiManager.loginFailed();
         })
     },
 
-    joinGame(){
-        this.sendMessage = new SendMessage();
-        this.sendMessage.joinGame((data)=>{
+    joinGame() {
+        this.sendMessage.joinGame((dataResponse) => {
             this.uiManager.setLabel('Joined Game');
-            this.data = data;
+            this.data = dataResponse;
+            Data.instance.setGameNumber(dataResponse.data.exD.ed.split(':')[1])
         });
     },
 
-    getODDs(){
+    getODDs() {
         this.oddsData = this.betStateManager.getODDs(this.data)
         this.uiManager.setLabel(this.oddsData);
     },
 
-    createOddsItem(){
+    createOddsItem() {
         this.uiManager.closePopup();
         this.uiManager.activeButtonCreator(false);
-        this.oddsData = (this.oddsData)? this.oddsData: this.betStateManager.getODDs(this.data);
-        this.betStateManager.instantiateBet(this.oddsData, this.oddsItemPrefab, this.oddsItemLayout, this.oddsItemBackground);
+        this.oddsData = (this.oddsData) ? this.oddsData : this.betStateManager.getODDs(this.data);
+        this.betStateManager.instantiateBet(this.oddsData, this.oddsItemPrefab, this.betPools, this.betBackgroundPools);
     },
 
-    bet(){
-        this.betStateManager.bet(this.betPool, (payload)=>{
-            this.sendMessage._executeCommand(payload, (dataResponse)=>{
+    bet() {
+        const payload = this.betStateManager.bet(this.betPools);
+        this.sendMessage._executeCommand(payload, (dataResponse) => {
+            Data.instance.dataRoundCurrent = (dataResponse.event == 'n') ? dataResponse : null;
+            if (Data.instance.dataRoundCurrent) {
                 this.uiManager.openPopup();
-                this.uiManager.setLabel(this.betStateManager.showResult(dataResponse.data));
-            })
+                this.uiManager.setLabel(this.betStateManager.showResult());
+            }
         })
     },
 });

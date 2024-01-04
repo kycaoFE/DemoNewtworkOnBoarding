@@ -1,4 +1,3 @@
-
 cc.Class({
     extends: cc.Component,
 
@@ -7,7 +6,6 @@ cc.Class({
         betTime: 0,
 
         betLabel: cc.Label,
-
         betButtonBackground: cc.Node,
 
         red: new cc.Color(255, 0, 0),
@@ -15,31 +13,30 @@ cc.Class({
         yellow: new cc.Color(255, 255, 0)
     },
 
-    bet(){
-        this.node.color = new cc.Color(255, 255, 0);
+    bet() {
         let chipValueBet = cc.sys.localStorage.getItem('chipCurrent');
         this.betValue += Number(chipValueBet);
-        this.setValueLabel(this.numBuffalos, this.oddValue, this.betValue+'K');
+        this.setValueLabel(this.numBuffalos, this.oddValue, this.betValue + 'K');
         this.setColorButtonBackground(this.yellow);
     },
 
-    getBet(){
-        if(this.betValue <= 0) return;
-        return this.node.name+':'+this.betValue;
+    getBet() {
+        if (this.betValue <= 0) return;
+        return this.node.name + ':' + this.betValue;
     },
 
-    setValueLabel(numBuffalos, oddValue, moneyBet){
+    setValueLabel(numBuffalos, oddValue, moneyBet) {
         this.numBuffalos = numBuffalos;
         this.oddValue = oddValue;
-        this.betLabel.string = `Cặp Bò: ` + numBuffalos + ` x`+ oddValue
+        this.betLabel.string = `Cặp Bò: ` + numBuffalos + ` x` + oddValue
             + `\n` + moneyBet;
     },
 
-    setBetButtonBackground(node){
+    setBetButtonBackground(node) {
         this.betButtonBackground = node;
     },
 
-    setColorButtonBackground(color){
+    setColorButtonBackground(color) {
         this.betButtonBackground.color = color;
     }
 });

@@ -17,7 +17,7 @@ cc.Class({
         button: [cc.Node],
     },
 
-    start () {
+    start() {
         this.popupNode.active = false;
         this.popupNode.scale = 0;
         this.activePayout(false);
@@ -26,22 +26,19 @@ cc.Class({
         gaEventEmitter.instance.registerEvent(gaEventCode.NETWORK.CANNOT_AUTHEN, this.loginFailed.bind(this));
     },
 
-    openPopup(){
+    openPopup() {
         this.popupNode.active = true;
         this.scrollNode.active = false;
         this.activePayout(false);
         cc.tween(this.popupNode)
-            .to(0.5, {scale: 1})
-            .call(()=>{
-
-            })
+            .to(0.5, { scale: 1 })
             .start();
     },
 
-    closePopup(){
+    closePopup() {
         cc.tween(this.popupNode)
-            .to(0.5, {scale: 0})
-            .call(()=>{
+            .to(0.5, { scale: 0 })
+            .call(() => {
                 this.popupNode.active = false;
                 this.scrollNode.active = true;
                 this.activePayout(true);
@@ -49,30 +46,30 @@ cc.Class({
             .start();
     },
 
-    loginFailed(){
+    loginFailed() {
         this.loginStatus(false);
     },
 
-    loginSuccess(){
+    loginSuccess() {
         this.loginStatus(true);
     },
 
-    loginStatus(status){
+    loginStatus(status) {
         this.openPopup();
-        this.popupLbl.string = (status)? 'Login Success': 'Login Failed' ;
+        this.popupLbl.string = (status) ? 'Login Success' : 'Login Failed';
     },
 
-    setLabel(stringLbl){
+    setLabel(stringLbl) {
         this.popupLbl.string = stringLbl;
     },
 
-    activePayout(status){
+    activePayout(status) {
         this.payout.active = status;
         this.payoutBackground.active = status;
-        this.startButton.active = status; 
+        this.startButton.active = status;
     },
 
-    activeButtonCreator(status){
+    activeButtonCreator(status) {
         this.button.forEach(element => {
             element.active = status;
         });
