@@ -1,5 +1,5 @@
 const { ccclass, property } = cc._decorator;
-
+import gaEventEmitter from "./cc-arcade-base/Scripts/Common/gaEventEmitter";
 import { Data, ccData } from "./data";
 import BetStateManager from "./betStateManager";
 import Network from "./network";
@@ -20,6 +20,7 @@ export default class MainController extends cc.Component {
   @property(cc.Node) betPools: cc.Node[] = [];
 
   @property(cc.Node) ui: cc.Node = null;
+  @property(cc.Node) racingController: cc.Node = null;
 
   onLoad() {
     Data.instance = new Data();
@@ -31,6 +32,7 @@ export default class MainController extends cc.Component {
     this.betStateManager = new BetStateManager();
     this.sendMessage = new SendMessage();
     this.network = new Network();
+    this.racingController.active = false;
   }
 
   login(): void {
@@ -43,7 +45,8 @@ export default class MainController extends cc.Component {
     this.sendMessage.joinGame((response: any) => {
       this.uiManager.setLabelPopup("Join Game Success");
       this.data = response;
-      Data.instance.setGameNumber(response.data.exD.ed.split(":")[1]);
+      const ed = response.data.exD.ed;
+      Data.instance.setGameNumber(ed.substr(ed.indexOf(':')+1, 7));
     });
   }
 
@@ -61,12 +64,34 @@ export default class MainController extends cc.Component {
 
   bet(): void {
     const payload: any = this.betStateManager.bet(this.betPools);
+    cc.warn(Data.instance.gameNumber);
+    cc.warn('payload', payload);
     this.sendMessage._executeCommand(payload, (response: any) => {
       Data.instance.dataRoundCurrent = response.event == "n" ? response : null;
-      if (Data.instance.dataRoundCurrent) { 
-        this.uiManager.openPopup();
-        this.uiManager.setLabelPopup(this.betStateManager.showResult());
+      if (Data.instance.dataRoundCurrent) {
+        this.racing();
       }
     });
+  }
+
+  reJoinGame(){
+    this.sendMessage.joinGame((response: any) => {
+      this.data = response;
+      const ed = response.data.exD.ed;
+      Data.instance.setGameNumber(ed.substr(ed.indexOf(':')+1, 7));
+    });
+  }
+
+  racing (){
+    this.ui.active = false;
+    this.racingController.active = true;
+    this.racingController.getComponent('racingController').racing(()=>{
+      this.ui.active = true;
+      this.racingController.active = false;
+      this.uiManager.openPopup();
+      this.uiManager.setLabelPopup(this.betStateManager.showResult());
+      this.racingController.getComponent('racingController').resetRacing();
+      this.reJoinGame();
+    }) 
   }
 }

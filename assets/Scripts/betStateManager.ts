@@ -25,7 +25,7 @@ export default class BetStateManager extends cc.Component {
             this.betButtonItems.push(betButtonItem);
 
             const betItemController = betButtonItem.getComponent('betItemController');
-            betItemController.setValueLabel(buffalosNumber, oddsValue, '');
+            betItemController.setValueLabel(buffalosNumber, oddsValue, 0);
             const betButtonBackground = betBackground[indexBetRow].getChildByName(betButtonItem.name);
             betItemController.setBetButtonBackground(betButtonBackground);
         });
@@ -56,12 +56,7 @@ export default class BetStateManager extends cc.Component {
             + `Bet Money Win: ` + Data.instance.getMoneyWin() + `K`;
         this.bettingCurrent.forEach(element => {
             const betItemController = element.getComponent('betItemController');
-            if (element.name == buffalosWin) {
-                betItemController.setColorButtonBackground(ccData.instance.red);
-            }
-            else {
-                betItemController.setColorButtonBackground(ccData.instance.green);
-            }
+            betItemController.resetBetValue();
         });
         return resultString;
     }

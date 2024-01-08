@@ -11,6 +11,7 @@ export default class uiManager extends cc.Component {
   @property(cc.Node) betBackground: cc.Node = null;
   @property(cc.Node) startButton: cc.Node = null;
   @property(cc.Node) buttons: cc.Node[] = [];
+  @property(cc.Node) cameraNode: cc.Node = null;
 
   @property(cc.Label) popupLbl: cc.Label = null;
 
@@ -30,6 +31,7 @@ export default class uiManager extends cc.Component {
     cc.tween(this.popupNode)
       .to(0.5, { scale: 1 })
       .start();
+    this.node.x = this.cameraNode.x;
   }
 
   closePopup(): void {
@@ -41,6 +43,8 @@ export default class uiManager extends cc.Component {
         this.activeBettingArea(true);
       })
       .start();
+      this.cameraNode.x = 0;
+      this.node.x = this.cameraNode.x;
   }
 
   loginFailed(): void {

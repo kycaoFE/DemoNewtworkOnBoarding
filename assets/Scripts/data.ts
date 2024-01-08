@@ -8,6 +8,8 @@ export class ccData extends cc.Component {
     public red = new cc.Color(255, 0, 0);
     public green = new cc.Color(0, 255, 0);
     public yellow = new cc.Color(255, 255, 0);
+    public white = new cc.Color(255,255,255);
+
 }
 
 export class Data {
@@ -16,7 +18,7 @@ export class Data {
     dataRoundCurrent: any = [];
     chipCurrentValues: number = null;
 
-    setGameNumber(gameNumber): any {
+    setGameNumber(gameNumber:any): any {
         this.gameNumber = gameNumber;
     }
 

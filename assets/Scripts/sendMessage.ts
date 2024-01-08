@@ -43,12 +43,7 @@ export default class SendMessage {
         }, {
             onEvent: this._onEvent.bind(this)
         });
-        const promise = gaPromise.resolve()
-            .waitUntil(() => this.latestRequest == null)
-            .then(() => {
-                this.latestRequest = promise;
-                return this._executeCommand(payload, callback);
-            })
+        return this._executeCommand(payload, callback);
     }
 
     _executeCommand(payload: any, callback: Function) {
@@ -81,6 +76,7 @@ export default class SendMessage {
                 const data = eventData.data;
                 if (data.cId == commandId) {
                     callback(eventData);
+                    return;
                 }
             }
         }, () => {

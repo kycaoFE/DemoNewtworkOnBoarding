@@ -26,8 +26,9 @@ export default class betItemController extends cc.Component {
     setValueLabel(numBuffalos: string, oddValue: string, moneyBet: number): void {
         this.numBuffalos = numBuffalos;
         this.oddValue = oddValue;
+        const moneyBetString = (moneyBet>0)? moneyBet+`K`:'';
         this.betLabel.string = `Cặp Bò: ` + numBuffalos + ` x` + oddValue
-            + `\n` + moneyBet + `K`;
+            + `\n` + moneyBetString;
     }
 
     setBetButtonBackground(node: cc.Node) {
@@ -36,6 +37,12 @@ export default class betItemController extends cc.Component {
 
     setColorButtonBackground(color: cc.Color) {
         this.betButtonBackground.color = color;
+    }
+
+    resetBetValue(){
+        this.betValue = 0;
+        this.setValueLabel(this.numBuffalos, this.oddValue, 0);
+        this.setColorButtonBackground(ccData.instance.white);
     }
 
 }
