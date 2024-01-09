@@ -24,7 +24,8 @@ export default class MainController extends cc.Component {
 
   onLoad() {
     Data.instance = new Data();
-    ccData.instance  = new ccData();
+    ccData.instance = new ccData();
+    gaEventEmitter.instance.registerEvent('racingDone', this.racingDone.bind(this));
   }
 
   start() {
@@ -33,6 +34,7 @@ export default class MainController extends cc.Component {
     this.sendMessage = new SendMessage();
     this.network = new Network();
     this.racingController.active = false;
+    this.login();
   }
 
   login(): void {
@@ -46,7 +48,8 @@ export default class MainController extends cc.Component {
       this.uiManager.setLabelPopup("Join Game Success");
       this.data = response;
       const ed = response.data.exD.ed;
-      Data.instance.setGameNumber(ed.substr(ed.indexOf(':')+1, 7));
+      Data.instance.setGameNumber(ed.substr(ed.indexOf(':') + 1, 7));
+      this.instantiateBetState();
     });
   }
 
@@ -64,8 +67,8 @@ export default class MainController extends cc.Component {
 
   bet(): void {
     const payload: any = this.betStateManager.bet(this.betPools);
-    cc.warn(Data.instance.gameNumber);
-    cc.warn('payload', payload);
+    // cc.warn(Data.instance.gameNumber);
+    // cc.warn('payload', payload);
     this.sendMessage._executeCommand(payload, (response: any) => {
       Data.instance.dataRoundCurrent = response.event == "n" ? response : null;
       if (Data.instance.dataRoundCurrent) {
@@ -74,24 +77,28 @@ export default class MainController extends cc.Component {
     });
   }
 
-  reJoinGame(){
+  reJoinGame() {
     this.sendMessage.joinGame((response: any) => {
       this.data = response;
       const ed = response.data.exD.ed;
-      Data.instance.setGameNumber(ed.substr(ed.indexOf(':')+1, 7));
+      Data.instance.setGameNumber(ed.substr(ed.indexOf(':') + 1, 7));
     });
   }
 
-  racing (){
+  racing() {
     this.ui.active = false;
     this.racingController.active = true;
-    this.racingController.getComponent('racingController').racing(()=>{
-      this.ui.active = true;
-      this.racingController.active = false;
-      this.uiManager.openPopup();
-      this.uiManager.setLabelPopup(this.betStateManager.showResult());
-      this.racingController.getComponent('racingController').resetRacing();
-      this.reJoinGame();
-    }) 
+    this.racingController.getComponent('racingController').racing(() => {
+
+    })
+  }
+
+  racingDone() {
+    this.ui.active = true;
+    this.racingController.active = false;
+    this.uiManager.openPopup();
+    this.uiManager.setLabelPopup(this.betStateManager.showResult());
+    this.racingController.getComponent('racingController').resetRacing();
+    this.reJoinGame();
   }
 }

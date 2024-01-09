@@ -80,7 +80,7 @@ export default class SendMessage {
                 }
             }
         }, () => {
-            cc.warn('timeOut');
+            // cc.warn('timeOut');
         });
     }
 
@@ -96,6 +96,6 @@ export default class SendMessage {
 
     _onEvent(eventData: any) {
         this.eventManager.onEvent.apply(this.eventManager, arguments);
-        cc.warn(eventData);
+        // cc.warn(eventData);
     }
 }
