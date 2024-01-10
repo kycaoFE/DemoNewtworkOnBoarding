@@ -97,6 +97,10 @@ export default class MainController extends cc.Component {
     this.ui.active = true;
     this.uiManager.openPopup();
     this.uiManager.setLabelPopup(this.betStateManager.showResult());
+    this.scheduleOnce(()=>{
+      this.uiManager.closePopup();
+      gaEventEmitter.instance.emit("nextRound");
+    },2)
     this.reJoinGame();
   }
 }

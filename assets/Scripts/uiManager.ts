@@ -20,7 +20,6 @@ export default class uiManager extends cc.Component {
     this.popupNode.scale = 0;
     this.activeBettingArea(false);
     this.activeButtonInit(true);
-    gaEventEmitter.instance.registerEvent(gaEventCode.NETWORK.WEB_SOCKET_OPEN, this.loginSuccess.bind(this));
     gaEventEmitter.instance.registerEvent(gaEventCode.NETWORK.CANNOT_AUTHEN, this.loginFailed.bind(this));
   }
 
@@ -29,7 +28,7 @@ export default class uiManager extends cc.Component {
     this.scrollNode.active = false;
     this.activeBettingArea(false);
     cc.tween(this.popupNode)
-      .to(0.5, { scale: 1 })
+      .to(0.5, { scale: 0.5 })
       .start();
     this.node.x = this.cameraNode.x;
   }
@@ -48,16 +47,8 @@ export default class uiManager extends cc.Component {
   }
 
   loginFailed(): void {
-    this.loginStatus(false);
-  }
-
-  loginSuccess(): void {
-    this.loginStatus(true);
-  }
-
-  loginStatus(status: boolean): void {
     this.openPopup();
-    this.popupLbl.string = status ? "Login Success" : "Login Failed";
+    this.setLabelPopup("Login Failed");
   }
 
   setLabelPopup(content: string): void {

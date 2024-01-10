@@ -6,12 +6,13 @@ export default class NewClass extends cc.Component {
 
     @property(cc.Node) clouds: cc.Node[] = [];
 
-    private startPos: Array<number> = [];
+    @property(cc.Node) startPos: cc.Node = null;
+    @property(cc.Node) endPos: cc.Node = null;
 
-    private speeds: Array<number> = [10, 20, 40];
+    private speeds: Array<number> = [30, 30, 20, 20, 10, 10];
 
     start () {
-        gaEventEmitter.instance.registerEvent('racingDone', this.resetCloudPos.bind(this));
+        // gaEventEmitter.instance.registerEvent('racingDone', this.resetCloudPos.bind(this));
         this.clouds.forEach((cloud, index) => {
             this.startPos[index]= cloud.x;
         });
@@ -19,6 +20,7 @@ export default class NewClass extends cc.Component {
 
     update (dt: number) {
         this.cloudMoving(dt);
+        this.resetCloudPos();
     }
 
     cloudMoving(dt: number){
@@ -29,7 +31,9 @@ export default class NewClass extends cc.Component {
 
     resetCloudPos(){
         this.clouds.forEach((cloud, index) => {
-            cloud.x = this.startPos[index];
+            if(cloud.x > this.endPos.x){
+                cloud.x = this.startPos.x;
+            }
         });
     }
 }

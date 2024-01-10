@@ -20,7 +20,7 @@ export default class NewClass extends cc.Component {
 
 
     protected onLoad(): void {
-        gaEventEmitter.instance.registerEvent('racingDone', this.resetRacing.bind(this));
+        gaEventEmitter.instance.registerEvent('nextRound', this.resetRacing.bind(this));
         gaEventEmitter.instance.registerEvent('racingPrepareDone', this.countDownStart.bind(this))
     }
     protected update(dt: number): void {
