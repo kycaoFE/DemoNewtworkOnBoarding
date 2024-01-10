@@ -1,4 +1,5 @@
 const { ccclass, property } = cc._decorator;
+import gaEventCode from "./cc-arcade-base/Scripts/Definitions/gaEventsCode";
 import gaEventEmitter from "./cc-arcade-base/Scripts/Common/gaEventEmitter";
 import { Data, ccData } from "./data";
 import BetStateManager from "./betStateManager";
@@ -26,6 +27,7 @@ export default class MainController extends cc.Component {
     Data.instance = new Data();
     ccData.instance = new ccData();
     gaEventEmitter.instance.registerEvent('racingDone', this.racingDone.bind(this));
+    gaEventEmitter.instance.registerEvent(gaEventCode.NETWORK.WEB_SOCKET_OPEN, this.joinGame.bind(this));
   }
 
   start() {
@@ -45,11 +47,11 @@ export default class MainController extends cc.Component {
 
   joinGame(): void {
     this.sendMessage.joinGame((response: any) => {
-      this.uiManager.setLabelPopup("Join Game Success");
       this.data = response;
       const ed = response.data.exD.ed;
       Data.instance.setGameNumber(ed.substr(ed.indexOf(':') + 1, 7));
       this.instantiateBetState();
+      this.racingController.active = true;
     });
   }
 
@@ -67,8 +69,6 @@ export default class MainController extends cc.Component {
 
   bet(): void {
     const payload: any = this.betStateManager.bet(this.betPools);
-    // cc.warn(Data.instance.gameNumber);
-    // cc.warn('payload', payload);
     this.sendMessage._executeCommand(payload, (response: any) => {
       Data.instance.dataRoundCurrent = response.event == "n" ? response : null;
       if (Data.instance.dataRoundCurrent) {
@@ -95,10 +95,8 @@ export default class MainController extends cc.Component {
 
   racingDone() {
     this.ui.active = true;
-    this.racingController.active = false;
     this.uiManager.openPopup();
     this.uiManager.setLabelPopup(this.betStateManager.showResult());
-    this.racingController.getComponent('racingController').resetRacing();
     this.reJoinGame();
   }
 }

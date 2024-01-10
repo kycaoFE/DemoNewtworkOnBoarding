@@ -22,18 +22,21 @@ export default class NewClass extends cc.Component {
         this.buffaloNumber = this.node.name;
         gaEventEmitter.instance.registerEvent("racing", this.run.bind(this));
     }
-    start() { }
+    start() { 
+        this.idle();
+    }
 
     run(data: any) {
+        this.anim.stop('idle');
         this.anim.play("run");
         this.oderFinish = data.indexOf(this.buffaloNumber);
         const timeChangeSpeed = Math.floor(this.randomMinMax(3, 5));
         const durations = this.randomDurations(this.oderFinish, timeChangeSpeed);
         const distances = this.randomDistance(timeChangeSpeed);
-        cc.warn("oder", this.oderFinish);
-        cc.warn("num: ", this.buffaloNumber);
-        cc.warn("dis: ", distances);
-        cc.warn("dur", durations);
+        // cc.warn("oder", this.oderFinish);
+        // cc.warn("num: ", this.buffaloNumber);
+        // cc.warn("dis: ", distances);
+        // cc.warn("dur", durations);
         var _delay = 0;
         durations.forEach((duration, index) => {
             const delay = (index > 0) ? durations[index] : 0;
@@ -77,6 +80,7 @@ export default class NewClass extends cc.Component {
             .call(() => {
                 if (distance == this.xFinish) {
                     this.anim.stop("run");
+                    this.idle();
                     if (this.oderFinish == 5) {
                         gaEventEmitter.instance.emit("racingDone");
                         this.resetStats();
@@ -93,4 +97,11 @@ export default class NewClass extends cc.Component {
     resetStats() {
         this.oderFinish = null;
     }
+
+    idle(){
+        this.scheduleOnce(()=>{
+            this.anim.play('idle');
+        }, this.randomMinMax(0,0.5))
+    }
+
 }

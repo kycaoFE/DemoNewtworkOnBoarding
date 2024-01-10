@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+	<dict>
+		<key>frames</key>
+		<dict>
+			<key>64x64_Atlas_Horse_II_Idle_01.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{48,38},{46,38}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{0,0},{46,38}}</string>
+				<key>sourceSize</key>
+				<string>{46,38}</string>
+			</dict>
+
+			<key>64x64_Atlas_Horse_II_Idle_02.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{48,38},{46,38}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{0,0},{46,38}}</string>
+				<key>sourceSize</key>
+				<string>{46,38}</string>
+			</dict>
+
+			<key>64x64_Atlas_Horse_II_Idle_03.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{0,37},{47,37}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{0,0},{47,37}}</string>
+				<key>sourceSize</key>
+				<string>{47,37}</string>
+			</dict>
+
+			<key>64x64_Atlas_Horse_II_Idle_04.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{0,0},{47,36}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{0,0},{47,36}}</string>
+				<key>sourceSize</key>
+				<string>{47,36}</string>
+			</dict>
+
+			<key>64x64_Atlas_Horse_II_Idle_05.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{48,0},{47,37}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{0,0},{47,37}}</string>
+				<key>sourceSize</key>
+				<string>{47,37}</string>
+			</dict>
+
+			<key>64x64_Atlas_Horse_II_Idle_06.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{0,75},{47,38}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{0,0},{47,38}}</string>
+				<key>sourceSize</key>
+				<string>{47,38}</string>
+			</dict>
+
+		</dict>
+
+		<key>metadata</key>
+		<dict>
+			<key>format</key>
+			<integer>2</integer>
+			<key>size</key>
+			<string>{128,128}</string>
+			<key>textureFileName</key>
+			<string>sprites.png</string>
+			</dict>
+		</dict>
+</plist>
