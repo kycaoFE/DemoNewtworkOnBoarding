@@ -86,7 +86,7 @@ export default class MainController extends cc.Component {
   }
 
   racing() {
-    this.ui.active = false;
+    this.uiManager.activeBettingArea(false);
     this.racingController.active = true;
     this.racingController.getComponent('racingController').racing(() => {
 
@@ -94,12 +94,12 @@ export default class MainController extends cc.Component {
   }
 
   racingDone() {
-    this.ui.active = true;
     this.uiManager.openPopup();
     this.uiManager.setLabelPopup(this.betStateManager.showResult());
     this.scheduleOnce(()=>{
       this.uiManager.closePopup();
-      gaEventEmitter.instance.emit("nextRound");
+      gaEventEmitter.instance.emit("prepareNextRound");
+      this.uiManager.activeBettingArea(true);
     },2)
     this.reJoinGame();
   }

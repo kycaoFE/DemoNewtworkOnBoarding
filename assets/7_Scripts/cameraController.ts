@@ -10,15 +10,15 @@ export default class NewClass extends cc.Component {
     @property(cc.Node) buffalos: cc.Node[] = [];
     @property(cc.Node) layers: cc.Node[] = [];
     @property(cc.Node) buffalosPool: cc.Node = null;
+    @property(cc.Node) ui: cc.Node = null;
+    @property(cc.Node) sky: cc.Node = null;
 
-    private speeds: Array<number> = [0.9, 0.6, 0.4];
+    private speeds: Array<number> = [0.6, 0.4];
     private isFollow: boolean = false;
     onLoad() {
         gaEventEmitter.instance.registerEvent('racing', () => { this.isRacing = true });
         gaEventEmitter.instance.registerEvent('racingPrepare', this.prepare.bind(this));
-        gaEventEmitter.instance.registerEvent('nextRound', ()=>{ 
-            this.setPosBackground(0);
-            this.isRacing = false});
+        gaEventEmitter.instance.registerEvent('prepareNextRound', this.nextRound.bind(this));
     }
 
     start() {
@@ -29,9 +29,10 @@ export default class NewClass extends cc.Component {
         this.setPosBackground(this.node.x);
         if (!this.isRacing) return;
         this.target = this.getFirstBuffalo();
-        if (this.node.x < 4000){
-            let targetPosition = new cc.Vec2(this.target.x+this.buffalosPool.x - 200, 0)
+        if (this.target.x+this.buffalosPool.x -200 >= this.node.x && this.node.x < 5060){
+            let targetPosition = new cc.Vec2(this.target.x+this.buffalosPool.x -200, 0)
             this.node.setPosition(targetPosition);
+            this.ui.x = this.node.x - 850;
         }
     }
 
@@ -53,10 +54,26 @@ export default class NewClass extends cc.Component {
 
     prepare(){
         cc.tween(this.node)
-        .to(1, {x: this.buffalos[0].x+this.buffalosPool.x-200})
+        .to(1, {x: 800})
         .call(()=>{
             gaEventEmitter.instance.emit('racingPrepareDone');
         })
+        .start();
+    }
+
+    nextRound(){
+        cc.tween(this.node)
+        .to(1, {x: 5300})
+        .to(0,{x: 0})
+        .call(()=>{
+            this.ui.x = -50;
+            this.isRacing = false
+            gaEventEmitter.instance.emit("nextRound");
+        })
+        .start();
+        cc.tween(this.ui)
+        .to(1, {x: 5250})
+        .to(0, {x: -50})
         .start();
     }
 

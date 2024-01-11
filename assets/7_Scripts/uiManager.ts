@@ -24,13 +24,13 @@ export default class uiManager extends cc.Component {
   }
 
   openPopup(): void {
+    this.popupNode.x = this.cameraNode.x;
     this.popupNode.active = true;
     this.scrollNode.active = false;
     this.activeBettingArea(false);
     cc.tween(this.popupNode)
       .to(0.5, { scale: 0.5 })
       .start();
-    this.node.x = this.cameraNode.x;
   }
 
   closePopup(): void {
@@ -42,8 +42,6 @@ export default class uiManager extends cc.Component {
         this.activeBettingArea(true);
       })
       .start();
-      this.cameraNode.x = 0;
-      this.node.x = this.cameraNode.x;
   }
 
   loginFailed(): void {

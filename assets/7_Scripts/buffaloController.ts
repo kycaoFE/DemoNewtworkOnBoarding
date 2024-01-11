@@ -5,7 +5,7 @@ const { ccclass, property } = cc._decorator;
 
 @ccclass
 export default class NewClass extends cc.Component {
-    @property(cc.Animation) anim: cc.Animation = null;
+    @property(sp.Skeleton) skeletonAnim: sp.Skeleton = null;
 
     private buffaloNumber: string;
     private oderFinish: number;
@@ -14,21 +14,21 @@ export default class NewClass extends cc.Component {
     private minDuration: number;
 
     protected onLoad(): void {
-        this.anim = this.node.getComponent(cc.Animation);
+        this.skeletonAnim = this.node.getComponent(sp.Skeleton);
         this.xFinish = Data.instance.xFinish;
         this.xStart = Data.instance.xStart;
         this.minDuration = Data.instance.minDuration;
         cc.warn(this.xFinish, this.xStart);
         this.buffaloNumber = this.node.name;
         gaEventEmitter.instance.registerEvent("racing", this.run.bind(this));
+        gaEventEmitter.instance.registerEvent('prepareNextRound', this.prepareNextRound.bind(this));
     }
     start() { 
         this.idle();
     }
 
     run(data: any) {
-        this.anim.stop('idle');
-        this.anim.play("run");
+        this.skeletonAnim.setAnimation(0,'run',true);
         this.oderFinish = data.indexOf(this.buffaloNumber);
         const timeChangeSpeed = Math.floor(this.randomMinMax(3, 5));
         const durations = this.randomDurations(this.oderFinish, timeChangeSpeed);
@@ -79,7 +79,7 @@ export default class NewClass extends cc.Component {
             .to(duration, { x: distance })
             .call(() => {
                 if (distance == this.xFinish) {
-                    this.anim.stop("run");
+                    // this.anim.stop("run");
                     this.idle();
                     if (this.oderFinish == 5) {
                         gaEventEmitter.instance.emit("racingDone");
@@ -98,10 +98,21 @@ export default class NewClass extends cc.Component {
         this.oderFinish = null;
     }
 
+    prepareNextRound(){
+        this.skeletonAnim.setAnimation(0, 'walk', true);
+        const posX = this.node.x;
+        cc.tween(this.node)
+        .to(1, {x: posX+240})
+        .call(()=>{
+            this.idle();
+            this.node.x = Data.instance.xStart;
+        })
+        .start();
+    }
+
     idle(){
-        this.scheduleOnce(()=>{
-            this.anim.play('idle');
-        }, this.randomMinMax(0,0.5))
+        const idleName = `idle`+ Math.floor(this.randomMinMax(1,4));
+        this.skeletonAnim.setAnimation(0, idleName, true);
     }
 
 }

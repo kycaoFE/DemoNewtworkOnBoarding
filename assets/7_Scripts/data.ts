@@ -18,7 +18,7 @@ export class Data {
     dataRoundCurrent: any = [];
     chipCurrentValues: number = null;
     xStart: number = -400;
-    xFinish: number = 3600;
+    xFinish: number = 4660;
     minDuration: number = 10;
 
     setGameNumber(gameNumber: any): any {

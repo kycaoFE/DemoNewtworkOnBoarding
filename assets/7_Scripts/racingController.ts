@@ -11,7 +11,6 @@ export default class NewClass extends cc.Component {
     @property(cc.Label) countDownLabel: cc.Label = null;
 
     @property minDuration: number = 10;
-    @property xEnd: number = 4600; 
     @property labelString: any = {
         value: 3
     };
@@ -53,9 +52,9 @@ export default class NewClass extends cc.Component {
     }
 
     resetRacing(){
-        this.buffalos.forEach(element => {
-            element.x = Data.instance.xStart;
-        });
+        // this.buffalos.forEach(element => {
+        //     element.x = Data.instance.xStart;
+        // });
     }
 
 }
