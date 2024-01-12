@@ -19,6 +19,7 @@ export class Data {
     chipCurrentValues: number = null;
     xStart: number = -400;
     xFinish: number = 4660;
+    racingDistance = 5060;
     minDuration: number = 10;
 
     setGameNumber(gameNumber: any): any {

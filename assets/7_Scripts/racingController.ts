@@ -52,9 +52,7 @@ export default class NewClass extends cc.Component {
     }
 
     resetRacing(){
-        // this.buffalos.forEach(element => {
-        //     element.x = Data.instance.xStart;
-        // });
+
     }
 
 }
