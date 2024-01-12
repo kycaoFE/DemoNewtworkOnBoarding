@@ -32,6 +32,7 @@ export default class MainController extends cc.Component {
 
   start() {
     this.uiManager = this.ui.getComponent("uiManager");
+    this.uiManager.activeBettingArea(true);
     this.betStateManager = new BetStateManager();
     this.sendMessage = new SendMessage();
     this.network = new Network();
@@ -62,7 +63,6 @@ export default class MainController extends cc.Component {
 
   instantiateBetState(): void {
     this.uiManager.closePopup();
-    this.uiManager.activeButtonInit(false);
     this.oddsData = (this.oddsData) ? this.oddsData : this.betStateManager.getODDs(this.data);
     this.betStateManager.instantiateBet(this.oddsData, this.oddsItemPrefab, this.betPools, this.betBackgroundPools);
   }

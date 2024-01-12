@@ -10,7 +10,6 @@ export default class uiManager extends cc.Component {
   @property(cc.Node) betPools: cc.Node = null;
   @property(cc.Node) betBackground: cc.Node = null;
   @property(cc.Node) startButton: cc.Node = null;
-  @property(cc.Node) buttons: cc.Node[] = [];
   @property(cc.Node) cameraNode: cc.Node = null;
 
   @property(cc.Label) popupLbl: cc.Label = null;
@@ -19,7 +18,6 @@ export default class uiManager extends cc.Component {
     this.popupNode.active = false;
     this.popupNode.scale = 0;
     this.activeBettingArea(false);
-    this.activeButtonInit(true);
     gaEventEmitter.instance.registerEvent(gaEventCode.NETWORK.CANNOT_AUTHEN, this.loginFailed.bind(this));
   }
 
@@ -57,10 +55,6 @@ export default class uiManager extends cc.Component {
     this.betPools.active = status;
     this.betBackground.active = status;
     this.startButton.active = status;
-  }
-  activeButtonInit(status: boolean): void {
-    this.buttons.forEach((element) => {
-      element.active = status;
-    });
+    this.scrollNode.active = status;
   }
 }

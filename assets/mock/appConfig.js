@@ -2,6 +2,7 @@
 let urlConstant = {
     API_URL: "https://api.staging.enostd.gay/",
     SOCKET_URL: "wss://sock.staging.enostd.gay",
+    TOKEN: "kycao",
     USER_TOKEN: "user_token",
     LOGIN_IFRAME: true,
     URL_TOKEN: 'token',

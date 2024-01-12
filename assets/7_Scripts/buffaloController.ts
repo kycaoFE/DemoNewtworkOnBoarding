@@ -28,9 +28,10 @@ export default class NewClass extends cc.Component {
     }
 
     run(data: any) {
-        this.skeletonAnim.setAnimation(0, 'run', true);
+        this.skeletonAnim.setAnimation(0, 'idle_trans_run', false);
+        this.skeletonAnim.addAnimation(0, 'run', true);
         this.oderFinish = data.indexOf(this.buffaloNumber);
-        const timeChangeSpeed = Math.floor(this.randomMinMax(3, 5));
+        const timeChangeSpeed = Math.floor(this.randomMinMax(4, 6));
         const durations = this.randomDurations(this.oderFinish, timeChangeSpeed);
         const distances = this.randomDistance(timeChangeSpeed);
         var _delay = 0;
@@ -60,7 +61,7 @@ export default class NewClass extends cc.Component {
                 break;
             }
             let posBuffalo = this.randomMinMax(
-                startPos + (5 * stepPos) / 6,
+                startPos + (3 * stepPos) / 5,
                 startPos + stepPos
             );
             distances.push(posBuffalo);

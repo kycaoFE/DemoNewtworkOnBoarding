@@ -12,7 +12,6 @@ export default class NewClass extends cc.Component {
     private speeds: Array<number> = [30, 30, 20, 20, 10, 10];
 
     start () {
-        // gaEventEmitter.instance.registerEvent('racingDone', this.resetCloudPos.bind(this));
         this.clouds.forEach((cloud, index) => {
             this.startPos[index]= cloud.x;
         });
