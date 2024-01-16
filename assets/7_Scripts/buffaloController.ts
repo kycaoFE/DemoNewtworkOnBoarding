@@ -12,78 +12,64 @@ export default class NewClass extends cc.Component {
     private xStart: number;
     private xFinish: number;
     private minDuration: number;
+    public speed: number = 0;
+    private durationFinish: number = 0;
+    private isIdle: boolean = true;
+    private timeChangeSpeed : number = 0;
+    private _timeChangeSpeed : number = 0;
+    private xCurrent: number = 0;
+    private distance: number =0;
 
     protected onLoad(): void {
-        this.skeletonAnim = this.node.getComponent(sp.Skeleton);
-        this.xFinish = Data.instance.xFinish;
-        this.xStart = Data.instance.xStart;
-        this.minDuration = Data.instance.minDuration;
-        cc.warn(this.xFinish, this.xStart);
-        this.buffaloNumber = this.node.name;
         gaEventEmitter.instance.registerEvent("racing", this.run.bind(this));
         gaEventEmitter.instance.registerEvent('prepareNextRound', this.prepareNextRound.bind(this));
     }
     start() {
+        this.skeletonAnim = this.node.getComponent(sp.Skeleton);
+        this.xFinish = Data.instance.xFinish;
+        this.xStart = Data.instance.xStart;
+        this.minDuration = Data.instance.minDuration;
+        this.buffaloNumber = this.node.name;
         this.idle();
     }
 
+    protected update(dt: number): void {
+        if(this.isIdle) return;
+        this.node.x += this.speed * dt;
+        this.changeSpeed(dt);
+        if(this.node.x >= this.xFinish) {
+            this.isIdle = true;
+            this.idle();
+            this.speed = 0;
+            if(this.oderFinish == 5) {
+                gaEventEmitter.instance.emit("racingDone");
+            }
+        }
+    }
+
     run(data: any) {
+        this.isIdle = false;
         this.skeletonAnim.setAnimation(0, 'idle_trans_run', false);
         this.skeletonAnim.addAnimation(0, 'run', true);
         this.oderFinish = data.indexOf(this.buffaloNumber);
-        const timeChangeSpeed = Math.floor(this.randomMinMax(4, 6));
-        const durations = this.randomDurations(this.oderFinish, timeChangeSpeed);
-        const distances = this.randomDistance(timeChangeSpeed);
-        var _delay = 0;
-        durations.forEach((duration, index) => {
-            const delay = (index > 0) ? duration : 0;
-            _delay += delay;
-            this.buffaloAction(_delay, distances[index], durations[index]);
-        });
-    }
-    randomDurations(oder: number, timeChangeSpeed: number) {
-        const durations = [];
-        var min = 0;
-        var max = this.minDuration + oder * 0.1;
-        for (let i = 1; i <= timeChangeSpeed; i++) {
-            durations.push((max - min) / timeChangeSpeed);
-        }
-        return durations;
+        this.durationFinish = 10 + this.oderFinish*0.5;
+        this.xCurrent = this.node.x;
+        this.distance = Data.instance.racingDistance;
+        this.speed = this.distance/this.durationFinish;
+        this.timeChangeSpeed = this.durationFinish/this.randomMinMax(3,5);
+        this._timeChangeSpeed = this.timeChangeSpeed;
     }
 
-    randomDistance(timeChangeSpeed: number) {
-        const distances = [];
-        var startPos = this.xStart;
-        const stepPos = (this.xFinish - this.xStart) / timeChangeSpeed;
-        for (let i = 1; i <= timeChangeSpeed; i++) {
-            if (i === timeChangeSpeed) {
-                distances.push(this.xFinish);
-                break;
-            }
-            let posBuffalo = this.randomMinMax(
-                startPos + (3 * stepPos) / 5,
-                startPos + stepPos
-            );
-            distances.push(posBuffalo);
-            startPos = posBuffalo;
+    changeSpeed(dt: number){
+        this._timeChangeSpeed -=dt;
+        if(this._timeChangeSpeed <= 0 && this.durationFinish >= this.timeChangeSpeed){
+            this.durationFinish -= this.timeChangeSpeed;
+            this.distance -= this.node.x - this.xCurrent;
+            this.speed = (this.distance/this.durationFinish)*this.randomMinMax(0.8, 1.2);
+            this._timeChangeSpeed = this.timeChangeSpeed;
+            this.xCurrent = this.node.x;
+            //cc.warn(`num:`,this.buffaloNumber, `dur:`, this.durationFinish,`dis:`, this.distance, `time:`,this.timeChangeSpeed,`speed:`, this.speed);
         }
-        return distances;
-    }
-
-    buffaloAction(delay: number, distance: number, duration: number) {
-        cc.tween(this.node)
-            .delay(delay)
-            .to(duration, { x: distance })
-            .call(() => {
-                if (distance == this.xFinish) {
-                    this.idle();
-                    if (this.oderFinish == 5) {
-                        gaEventEmitter.instance.emit("racingDone");
-                        this.resetStats();
-                    }
-                }
-            })
-            .start();
     }
 
     randomMinMax(min: number, max: number) {

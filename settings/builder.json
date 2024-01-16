@@ -22,9 +22,9 @@
   "fb-instant-games": {},
   "includeSDKBox": false,
   "inlineSpriteFrames": true,
-  "inlineSpriteFrames_native": true,
+  "inlineSpriteFrames_native": false,
   "md5Cache": false,
-  "mergeStartScene": false,
+  "mergeStartScene": true,
   "optimizeHotUpdate": false,
   "orientation": {
     "landscapeLeft": true,
@@ -32,14 +32,14 @@
     "portrait": false,
     "upsideDown": false
   },
-  "packageName": "org.cocos2d.DemoNewtworkOnBoarding",
+  "packageName": "org.cocos2d.DemoNewtwork",
   "qqplay": {
     "REMOTE_SERVER_ROOT": "",
     "orientation": "portrait",
     "zip": false
   },
   "startScene": "9f22ed6e-6002-402e-b232-48ec06614f40",
-  "title": "DemoNewtworkOnBoarding",
+  "title": "DemoNewtwork",
   "webOrientation": "auto",
   "wechatgame": {
     "REMOTE_SERVER_ROOT": "",
@@ -49,5 +49,5 @@
     "subContext": ""
   },
   "xxteaKey": "619b86a0-57f8-40",
-  "zipCompressJs": true
+  "zipCompressJs": false
 }

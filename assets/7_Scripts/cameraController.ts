@@ -12,6 +12,7 @@ export default class NewClass extends cc.Component {
     @property(cc.Node) buffalosPool: cc.Node = null;
     @property(cc.Node) ui: cc.Node = null;
     @property(cc.Node) sky: cc.Node = null;
+    @property(cc.Node) mask: cc.Node = null;
 
     private isRacing: boolean = false;
     private speeds: Array<number> = [20, 40];
@@ -24,6 +25,10 @@ export default class NewClass extends cc.Component {
         gaEventEmitter.instance.registerEvent('racing', this.racing.bind(this));
         gaEventEmitter.instance.registerEvent('racingPrepare', this.prepare.bind(this));
         gaEventEmitter.instance.registerEvent('prepareNextRound', this.nextRound.bind(this));
+    }
+
+    protected start(): void {
+
     }
 
     update(dt: number) {

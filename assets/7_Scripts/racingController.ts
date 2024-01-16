@@ -14,16 +14,26 @@ export default class NewClass extends cc.Component {
     @property labelString: any = {
         value: 3
     };
+    private oversteer: number = 300;
+    private distanceScroll = 800;
+    private distanceScrollPrepare = 240;
+    private uiPosition = 50;
+    private isRacing : boolean = false;
 
     private buffalosOderFinish: Array<any> = [];
 
 
     protected onLoad(): void {
-        gaEventEmitter.instance.registerEvent('nextRound', this.resetRacing.bind(this));
+        gaEventEmitter.instance.registerEvent('prepareNextRound', this.resetRacing.bind(this));
         gaEventEmitter.instance.registerEvent('racingPrepareDone', this.countDownStart.bind(this))
+        gaEventEmitter.instance.registerEvent('racingDone', ()=>{
+            this.isRacing = false;
+        })
     }
     protected update(dt: number): void {
         this.countDownLabel.string = Math.round(this.labelString.value).toString();
+        if(!this.isRacing || this.node.x <= - Data.instance.racingDistance - 200 || this.getFastestBuffalo().x <= 0) return;
+        this.node.x -= this.getFastestBuffalo().getComponent('buffaloController').speed * dt;
     }
 
     start () {
@@ -32,7 +42,28 @@ export default class NewClass extends cc.Component {
 
     racing(){ 
         this.buffalosOderFinish = Data.instance.getOderFinish().split('');
-        gaEventEmitter.instance.emit('racingPrepare');
+        this.prepare();
+        // gaEventEmitter.instance.emit('racingPrepare');
+    }
+
+    getFastestBuffalo(){
+        var fastestBuffalo = this.buffalos[0];
+        this.buffalos.forEach(buffalo => {
+            if(buffalo.x > fastestBuffalo.x){
+                fastestBuffalo = buffalo;
+            }
+        });
+        return fastestBuffalo;
+    }
+
+    prepare() {
+        const durationPrepare = 1;
+        cc.tween(this.node)
+            .by(durationPrepare, { x: -this.distanceScroll })
+            .call(() => {
+                gaEventEmitter.instance.emit('racingPrepareDone');
+            })
+            .start();
     }
 
     countDownStart(){
@@ -45,6 +76,8 @@ export default class NewClass extends cc.Component {
         .to(3,{value: 0})
         .call(()=>{
             gaEventEmitter.instance.emit('racing', this.buffalosOderFinish);
+            cc.warn('numBuffalo', this.buffalosOderFinish);
+            this.isRacing = true;
             this.countDownLabel.node.active = false;
         })
         .start();
@@ -52,7 +85,12 @@ export default class NewClass extends cc.Component {
     }
 
     resetRacing(){
-
+        cc.tween(this.node)
+        .by(1,{x: -240})
+        .call(()=>{
+            this.node.x = -200;
+        })
+        .start();
     }
 
 }

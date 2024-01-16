@@ -31,12 +31,12 @@ export default class MainController extends cc.Component {
   }
 
   start() {
-    this.uiManager = this.ui.getComponent("uiManager");
-    this.uiManager.activeBettingArea(true);
     this.betStateManager = new BetStateManager();
     this.sendMessage = new SendMessage();
     this.network = new Network();
-    this.racingController.active = false;
+    this.uiManager = this.ui.getComponent("uiManager");
+    this.uiManager.activeBettingArea(true);
+    this.racingController.active = true;
     this.login();
   }
 
@@ -47,13 +47,16 @@ export default class MainController extends cc.Component {
   }
 
   joinGame(): void {
-    this.sendMessage.joinGame((response: any) => {
-      this.data = response;
-      const ed = response.data.exD.ed;
-      Data.instance.setGameNumber(ed.substr(ed.indexOf(':') + 1, 7));
-      this.instantiateBetState();
-      this.racingController.active = true;
-    });
+    this.uiManager.loginSuccess();
+    this.scheduleOnce(()=>{
+      this.sendMessage.joinGame((response: any) => {
+        this.data = response;
+        const ed = response.data.exD.ed;
+        Data.instance.setGameNumber(ed.substr(ed.indexOf(':') + 1, 7));
+        this.instantiateBetState();
+        this.racingController.active = true;
+      });
+    }, 2)
   }
 
   getODDs(): void {
@@ -87,10 +90,9 @@ export default class MainController extends cc.Component {
 
   racing() {
     this.uiManager.activeBettingArea(false);
+    this.uiManager.scrollUI(-850);
     this.racingController.active = true;
-    this.racingController.getComponent('racingController').racing(() => {
-
-    })
+    this.racingController.getComponent('racingController').racing();
   }
 
   racingDone() {
@@ -98,6 +100,7 @@ export default class MainController extends cc.Component {
     this.uiManager.setLabelPopup(this.betStateManager.showResult());
     this.scheduleOnce(()=>{
       this.uiManager.closePopup();
+      this.uiManager.scrollUI(850);
       gaEventEmitter.instance.emit("prepareNextRound");
       this.uiManager.activeBettingArea(true);
     },2)
