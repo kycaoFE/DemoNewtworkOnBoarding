@@ -1,6 +1,6 @@
 import { Data, ccData } from "./data";
 import gaEventEmitter from "./cc-arcade-base/Scripts/Common/gaEventEmitter";
-const {ccclass, property} = cc._decorator;
+const { ccclass, property } = cc._decorator;
 
 @ccclass
 export default class NewClass extends cc.Component {
@@ -17,47 +17,47 @@ export default class NewClass extends cc.Component {
         value: 3
     };
 
-    private layerSpeed: Array<number> = [0.6, 0.8];
-    private oversteer: number = 300;
     private distanceScroll = 800;
     private distanceScrollPrepare = 240;
-    private uiPosition = 50;
-    private isRacing : boolean = false;
+
+    private isRacing: boolean = false;
 
     private buffalosOderFinish: Array<any> = [];
+    private layerSpeed: Array<number> = [0.7, 0.9];
 
 
     protected onLoad(): void {
-        gaEventEmitter.instance.registerEvent('prepareNextRound', this.resetRacing.bind(this));
+        gaEventEmitter.instance.registerEvent('prepareNextRound', this.prepareNextRound.bind(this));
         gaEventEmitter.instance.registerEvent('racingPrepareDone', this.countDownStart.bind(this))
-        gaEventEmitter.instance.registerEvent('racingDone', ()=>{
+        gaEventEmitter.instance.registerEvent('racingDone', () => {
             this.isRacing = false;
         })
     }
     protected update(dt: number): void {
-        this.countDownLabel.string = Math.round(this.labelString.value).toString();
-        if(!this.isRacing || this.node.x <= - Data.instance.racingDistance - 200 || this.getFastestBuffalo().x <= 0) return;
-        const speed = this.getFastestBuffalo().getComponent('buffaloController').speed
-        this.node.x -=  speed* dt;
+        if (this.countDownLabel.node.active) {
+            this.countDownLabel.string = Math.round(this.labelString.value).toString();
+        }
+        if (!this.isRacing || this.node.x <= - Data.instance.racingDistance - 200 || this.getFastestBuffalo().x <= 0) return;
+        const speed = this.getFastestBuffalo().getComponent('buffaloController').speed;
+        this.node.x -= speed * dt;
         this.layers.forEach((layer, index) => {
-            layer.x -= this.layerSpeed[index]*speed * dt;
+            layer.x -= this.layerSpeed[index] * speed * dt;
         });
     }
 
-    start () {
+    start() {
         this.countDownLabel.node.active = false;
     }
 
-    racing(){ 
+    racing() {
         this.buffalosOderFinish = Data.instance.getOderFinish().split('');
         this.prepare();
-        // gaEventEmitter.instance.emit('racingPrepare');
     }
 
-    getFastestBuffalo(){
+    getFastestBuffalo() {
         var fastestBuffalo = this.buffalos[0];
         this.buffalos.forEach(buffalo => {
-            if(buffalo.x > fastestBuffalo.x){
+            if (buffalo.x > fastestBuffalo.x) {
                 fastestBuffalo = buffalo;
             }
         });
@@ -74,36 +74,40 @@ export default class NewClass extends cc.Component {
             .start();
         this.layers.forEach((layer, index) => {
             cc.tween(layer)
-            .by(durationPrepare, { x: -this.distanceScroll * this.layerSpeed[index] -200 })
-            .start();
+                .by(durationPrepare, { x: -(this.distanceScroll) * this.layerSpeed[index] })
+                .start();
         });
     }
 
-    countDownStart(){
+    countDownStart() {
         const time = 3;
         this.countDownLabel.node.active = true;
         this.labelString = {
             value: time
         }
         cc.tween(this.labelString)
-        .to(3,{value: 0})
-        .call(()=>{
-            gaEventEmitter.instance.emit('racing', this.buffalosOderFinish);
-            cc.warn('numBuffalo', this.buffalosOderFinish);
-            this.isRacing = true;
-            this.countDownLabel.node.active = false;
-        })
-        .start();
- 
+            .to(3, { value: 0 })
+            .call(() => {
+                gaEventEmitter.instance.emit('racing', this.buffalosOderFinish);
+                this.isRacing = true;
+                this.countDownLabel.node.active = false;
+            })
+            .start();
+
     }
 
-    resetRacing(){
+    prepareNextRound() {
         cc.tween(this.node)
-        .by(1,{x: -240})
-        .call(()=>{
-            this.node.x = -200;
-        })
-        .start();
+            .by(1, { x: -this.distanceScrollPrepare })
+            .call(() => {
+                this.node.x = -200;
+            })
+            .start();
+        this.layers.forEach((layer, index) => {
+            cc.tween(layer)
+                .by(1, { x: -200 * this.layerSpeed[index] })
+                .start();
+        });
     }
 
 }

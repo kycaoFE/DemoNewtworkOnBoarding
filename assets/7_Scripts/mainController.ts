@@ -48,6 +48,7 @@ export default class MainController extends cc.Component {
 
   joinGame(): void {
     this.uiManager.loginSuccess();
+    this.ui.active = false;
     this.scheduleOnce(()=>{
       this.sendMessage.joinGame((response: any) => {
         this.data = response;
@@ -65,6 +66,7 @@ export default class MainController extends cc.Component {
   }
 
   instantiateBetState(): void {
+    this.ui.active = true;
     this.uiManager.closePopup();
     this.oddsData = (this.oddsData) ? this.oddsData : this.betStateManager.getODDs(this.data);
     this.betStateManager.instantiateBet(this.oddsData, this.oddsItemPrefab, this.betPools, this.betBackgroundPools);

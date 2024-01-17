@@ -9,9 +9,7 @@ export default class NewClass extends cc.Component {
 
     private buffaloNumber: string;
     private oderFinish: number;
-    private xStart: number;
     private xFinish: number;
-    private minDuration: number;
     public speed: number = 0;
     private durationFinish: number = 0;
     private isIdle: boolean = true;
@@ -27,8 +25,6 @@ export default class NewClass extends cc.Component {
     start() {
         this.skeletonAnim = this.node.getComponent(sp.Skeleton);
         this.xFinish = Data.instance.xFinish;
-        this.xStart = Data.instance.xStart;
-        this.minDuration = Data.instance.minDuration;
         this.buffaloNumber = this.node.name;
         this.idle();
     }
@@ -52,7 +48,7 @@ export default class NewClass extends cc.Component {
         this.skeletonAnim.setAnimation(0, 'idle_trans_run', false);
         this.skeletonAnim.addAnimation(0, 'run', true);
         this.oderFinish = data.indexOf(this.buffaloNumber);
-        this.durationFinish = 10 + this.oderFinish*0.5;
+        this.durationFinish = Data.instance.minDuration + this.oderFinish*0.5;
         this.xCurrent = this.node.x;
         this.distance = Data.instance.racingDistance;
         this.speed = this.distance/this.durationFinish;
@@ -68,7 +64,6 @@ export default class NewClass extends cc.Component {
             this.speed = (this.distance/this.durationFinish)*this.randomMinMax(0.8, 1.2);
             this._timeChangeSpeed = this.timeChangeSpeed;
             this.xCurrent = this.node.x;
-            //cc.warn(`num:`,this.buffaloNumber, `dur:`, this.durationFinish,`dis:`, this.distance, `time:`,this.timeChangeSpeed,`speed:`, this.speed);
         }
     }
 

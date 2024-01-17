@@ -23,7 +23,7 @@ export default class uiManager extends cc.Component {
   openPopup(): void {
     this.popupNode.active = true;
     cc.tween(this.popupNode)
-      .to(0.5, { scale: 0.5 })
+      .to(0.5, { scale: 1 })
       .start();
   }
 
