@@ -5,7 +5,7 @@ export default class NewClass extends cc.Component {
 
     @property(cc.Prefab) layer: cc.Prefab = null;
 
-    @property _positionSpawn: number = -1200;
+    @property _positionSpawn: number = -200;
 
     private count: number = 0;
     private numberChildren = 7;

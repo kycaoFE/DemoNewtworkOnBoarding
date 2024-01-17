@@ -9,11 +9,15 @@ export default class NewClass extends cc.Component {
     @property(cc.Label) distanceLabel: cc.Label = null;
     @property(cc.Node) finishLine: cc.Node = null;
     @property(cc.Label) countDownLabel: cc.Label = null;
+    @property(cc.Node) layers: cc.Node[] = [];
+
 
     @property minDuration: number = 10;
     @property labelString: any = {
         value: 3
     };
+
+    private layerSpeed: Array<number> = [0.6, 0.8];
     private oversteer: number = 300;
     private distanceScroll = 800;
     private distanceScrollPrepare = 240;
@@ -33,7 +37,11 @@ export default class NewClass extends cc.Component {
     protected update(dt: number): void {
         this.countDownLabel.string = Math.round(this.labelString.value).toString();
         if(!this.isRacing || this.node.x <= - Data.instance.racingDistance - 200 || this.getFastestBuffalo().x <= 0) return;
-        this.node.x -= this.getFastestBuffalo().getComponent('buffaloController').speed * dt;
+        const speed = this.getFastestBuffalo().getComponent('buffaloController').speed
+        this.node.x -=  speed* dt;
+        this.layers.forEach((layer, index) => {
+            layer.x -= this.layerSpeed[index]*speed * dt;
+        });
     }
 
     start () {
@@ -64,6 +72,11 @@ export default class NewClass extends cc.Component {
                 gaEventEmitter.instance.emit('racingPrepareDone');
             })
             .start();
+        this.layers.forEach((layer, index) => {
+            cc.tween(layer)
+            .by(durationPrepare, { x: -this.distanceScroll * this.layerSpeed[index] -200 })
+            .start();
+        });
     }
 
     countDownStart(){
