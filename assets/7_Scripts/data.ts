@@ -21,6 +21,7 @@ export class Data {
     xFinish: number = 4660;
     racingDistance = 5060;
     minDuration: number = 10;
+    layerDistance: Array<number> = [0, 0];
 
     setGameNumber(gameNumber: any): any {
         this.gameNumber = gameNumber;

@@ -47,10 +47,12 @@ export default class NewClass extends cc.Component {
         this.isIdle = false;
         this.skeletonAnim.setAnimation(0, 'idle_trans_run', false);
         this.skeletonAnim.addAnimation(0, 'run', true);
+
         this.oderFinish = data.indexOf(this.buffaloNumber);
+
         this.durationFinish = Data.instance.minDuration + this.oderFinish*0.5;
-        this.xCurrent = this.node.x;
         this.distance = Data.instance.racingDistance;
+        this.xCurrent = this.node.x;
         this.speed = this.distance/this.durationFinish;
         this.timeChangeSpeed = this.durationFinish/this.randomMinMax(3,5);
         this._timeChangeSpeed = this.timeChangeSpeed;
@@ -77,6 +79,7 @@ export default class NewClass extends cc.Component {
 
     prepareNextRound() {
         this.skeletonAnim.setAnimation(0, 'walk', true);
+
         cc.tween(this.node)
             .by(1, { x: 240 })
             .call(() => {

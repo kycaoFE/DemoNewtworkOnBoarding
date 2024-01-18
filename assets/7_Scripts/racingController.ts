@@ -33,20 +33,26 @@ export default class NewClass extends cc.Component {
             this.isRacing = false;
         })
     }
+
+    start() {
+        this.countDownLabel.node.active = false;
+    }
+
     protected update(dt: number): void {
         if (this.countDownLabel.node.active) {
             this.countDownLabel.string = Math.round(this.labelString.value).toString();
         }
         if (!this.isRacing || this.node.x <= - Data.instance.racingDistance - 200 || this.getFastestBuffalo().x <= 0) return;
-        const speed = this.getFastestBuffalo().getComponent('buffaloController').speed;
-        this.node.x -= speed * dt;
-        this.layers.forEach((layer, index) => {
-            layer.x -= this.layerSpeed[index] * speed * dt;
-        });
-    }
 
-    start() {
-        this.countDownLabel.node.active = false;
+        const speed = this.getFastestBuffalo().getComponent('buffaloController').speed;
+
+        this.node.x -= speed * dt;
+
+        this.layers.forEach((layer, index) => {
+            const distance = this.layerSpeed[index] * speed * dt
+            layer.x -= distance;
+            Data.instance.layerDistance[index] += distance;
+        });
     }
 
     racing() {
@@ -66,27 +72,36 @@ export default class NewClass extends cc.Component {
 
     prepare() {
         const durationPrepare = 1;
+        
         cc.tween(this.node)
             .by(durationPrepare, { x: -this.distanceScroll })
             .call(() => {
                 gaEventEmitter.instance.emit('racingPrepareDone');
             })
             .start();
+
         this.layers.forEach((layer, index) => {
+            const distance = -(this.distanceScroll) * this.layerSpeed[index]
+
             cc.tween(layer)
-                .by(durationPrepare, { x: -(this.distanceScroll) * this.layerSpeed[index] })
+                .by(durationPrepare, { x: distance })
+                .call(() => {
+                    Data.instance.layerDistance[index] -= distance;
+                })
                 .start();
         });
     }
 
     countDownStart() {
         const time = 3;
+
         this.countDownLabel.node.active = true;
+
         this.labelString = {
             value: time
         }
         cc.tween(this.labelString)
-            .to(3, { value: 0 })
+            .to(time, { value: 0 })
             .call(() => {
                 gaEventEmitter.instance.emit('racing', this.buffalosOderFinish);
                 this.isRacing = true;
@@ -101,11 +116,17 @@ export default class NewClass extends cc.Component {
             .by(1, { x: -this.distanceScrollPrepare })
             .call(() => {
                 this.node.x = -200;
+                gaEventEmitter.instance.emit('prepareDone')
             })
             .start();
+
         this.layers.forEach((layer, index) => {
+            const distance = -200 * this.layerSpeed[index]
             cc.tween(layer)
-                .by(1, { x: -200 * this.layerSpeed[index] })
+                .by(1, { x: distance })
+                .call(() => {
+                    Data.instance.layerDistance[index] -= distance;
+                })
                 .start();
         });
     }

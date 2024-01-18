@@ -23,11 +23,17 @@ export default class MainController extends cc.Component {
   @property(cc.Node) ui: cc.Node = null;
   @property(cc.Node) racingController: cc.Node = null;
 
+  private isAutoBet: boolean= false;
+
   onLoad() {
     Data.instance = new Data();
     ccData.instance = new ccData();
+
     gaEventEmitter.instance.registerEvent('racingDone', this.racingDone.bind(this));
     gaEventEmitter.instance.registerEvent(gaEventCode.NETWORK.WEB_SOCKET_OPEN, this.joinGame.bind(this));
+    gaEventEmitter.instance.registerEvent('prepareDone', ()=>{
+      if(this.isAutoBet) this.racing();
+    });
   }
 
   start() {
@@ -35,8 +41,10 @@ export default class MainController extends cc.Component {
     this.sendMessage = new SendMessage();
     this.network = new Network();
     this.uiManager = this.ui.getComponent("uiManager");
+
     this.uiManager.activeBettingArea(true);
     this.racingController.active = true;
+
     this.login();
   }
 
@@ -48,7 +56,9 @@ export default class MainController extends cc.Component {
 
   joinGame(): void {
     this.uiManager.loginSuccess();
+
     this.ui.active = false;
+
     this.scheduleOnce(()=>{
       this.sendMessage.joinGame((response: any) => {
         this.data = response;
@@ -74,6 +84,7 @@ export default class MainController extends cc.Component {
 
   bet(): void {
     const payload: any = this.betStateManager.bet(this.betPools);
+
     this.sendMessage._executeCommand(payload, (response: any) => {
       Data.instance.dataRoundCurrent = response.event == "n" ? response : null;
       if (Data.instance.dataRoundCurrent) {
@@ -100,6 +111,7 @@ export default class MainController extends cc.Component {
   racingDone() {
     this.uiManager.openPopup();
     this.uiManager.setLabelPopup(this.betStateManager.showResult());
+    
     this.scheduleOnce(()=>{
       this.uiManager.closePopup();
       this.uiManager.scrollUI(850);
@@ -107,5 +119,14 @@ export default class MainController extends cc.Component {
       this.uiManager.activeBettingArea(true);
     },2)
     this.reJoinGame();
+  }
+
+  autoBet(){
+    this.isAutoBet = true;
+    this.racing();
+  }
+
+  unAutoBet(){
+    this.isAutoBet = false;
   }
 }

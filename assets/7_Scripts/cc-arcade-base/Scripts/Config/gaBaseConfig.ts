@@ -13,7 +13,7 @@ export default class gaBaseConfig {
     static designSize = {
         width: 1280,
         height: 720,
-        maxWidth: 2000,
+        maxWidth: 1280,
     };
     static visibleSize = {
         width: 1280,
