@@ -22,27 +22,42 @@ export class Data {
     racingDistance = 5060;
     minDuration: number = 10;
     layerDistance: Array<number> = [0, 0];
+    orh: Array<string> = [];
 
     setGameNumber(gameNumber: any): any {
         this.gameNumber = gameNumber;
     }
 
     getBuffalosWin(): any {
-        const data = this.dataRoundCurrent.data;
-        const buffalosWin = (data.orh[0] < data.orh[1]) ? data.orh[0] + data.orh[1] : data.orh[1] + data.orh[0];
-        return buffalosWin;
+        // const data = this.dataRoundCurrent.data;
+        // const buffalosWin = (data.orh[0] < data.orh[1]) ? data.orh[0] + data.orh[1] : data.orh[1] + data.orh[0];
+        return this.orh[0]+this.orh[1];
     }
 
     getOderFinish(): any {
-        return this.dataRoundCurrent.data.orh;
+        // return this.dataRoundCurrent.data.orh;
+        return this.orh;
     }
 
     getMoneyWin(): any {
-        return Number((this.dataRoundCurrent.data.wg.split(';')[1])).toFixed();
+        // return Number((this.dataRoundCurrent.data.wg.split(';')[1])).toFixed();
+        return 0;
     }
 
     getOderBuffalo(buffaloNumber: string) {
-        const oderFinish = this.getOderFinish();
-        return Number(oderFinish.indexOf(buffaloNumber));
+        // const oderFinish = this.getOderFinish();
+        const orderFinish = this.orh;
+        return Number(orderFinish.indexOf(buffaloNumber));
+    }
+
+    randomOrh(){
+        this.orh = [];
+        const orhBase = ['1','2','3','4','5','6'];
+        for (let i = 0; i < 6; i++){
+            const randomIndex = Number([Math.floor(Math.random() * (orhBase.length))]);
+            this.orh.push(orhBase[randomIndex]);
+            orhBase.splice(randomIndex, 1);
+        }
+        cc.warn(this.orh);
     }
 }

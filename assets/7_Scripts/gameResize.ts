@@ -25,9 +25,17 @@ export default class NewClass extends CanvasScaleByOrientation {
         }
     }
 
-    protected scaleCanvasByOrientation(): void {
+    protected scaleCanvasByOrientation(): void {    
         super.scaleCanvasByOrientation();
-        const { visibleSize, designSize } = GameConfig;
+        const designSize = {
+            width: 1280,
+            height: 720,
+            maxWidth: 1280,
+        };
+        const visibleSize = {
+            width: 1280,
+            height: 720,
+        };
 
         this._visibleSize = cc.view.getVisibleSize();
 

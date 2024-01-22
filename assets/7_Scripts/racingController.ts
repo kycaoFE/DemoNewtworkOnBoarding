@@ -56,7 +56,9 @@ export default class NewClass extends cc.Component {
     }
 
     racing() {
-        this.buffalosOderFinish = Data.instance.getOderFinish().split('');
+        // this.buffalosOderFinish = Data.instance.getOderFinish().split('');
+        Data.instance.randomOrh();
+        this.buffalosOderFinish = Data.instance.getOderFinish();
         this.prepare();
     }
 

@@ -30,7 +30,7 @@ export default class MainController extends cc.Component {
     ccData.instance = new ccData();
 
     gaEventEmitter.instance.registerEvent('racingDone', this.racingDone.bind(this));
-    gaEventEmitter.instance.registerEvent(gaEventCode.NETWORK.WEB_SOCKET_OPEN, this.joinGame.bind(this));
+    // gaEventEmitter.instance.registerEvent(gaEventCode.NETWORK.WEB_SOCKET_OPEN, this.joinGame.bind(this));
     gaEventEmitter.instance.registerEvent('prepareDone', ()=>{
       if(this.isAutoBet) this.racing();
     });
@@ -83,14 +83,15 @@ export default class MainController extends cc.Component {
   }
 
   bet(): void {
-    const payload: any = this.betStateManager.bet(this.betPools);
+    this.racing();
+      // const payload: any = this.betStateManager.bet(this.betPools);
 
-    this.sendMessage._executeCommand(payload, (response: any) => {
-      Data.instance.dataRoundCurrent = response.event == "n" ? response : null;
-      if (Data.instance.dataRoundCurrent) {
-        this.racing();
-      }
-    });
+      // this.sendMessage._executeCommand(payload, (response: any) => {
+      //   Data.instance.dataRoundCurrent = response.event == "n" ? response : null;
+      //   if (Data.instance.dataRoundCurrent) {
+      //     this.racing();
+      //   }
+      // });
   }
 
   reJoinGame() {
@@ -118,7 +119,7 @@ export default class MainController extends cc.Component {
       gaEventEmitter.instance.emit("prepareNextRound");
       this.uiManager.activeBettingArea(true);
     },2)
-    this.reJoinGame();
+    // this.reJoinGame();
   }
 
   autoBet(){

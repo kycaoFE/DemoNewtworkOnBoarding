@@ -3244,6 +3244,9 @@
     "startButton": {
       "__id__": 15
     },
+    "autoBetButton": {
+      "__id__": 23
+    },
     "popupLbl": {
       "__id__": 78
     },

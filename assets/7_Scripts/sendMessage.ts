@@ -43,7 +43,14 @@ export default class SendMessage {
         }, {
             onEvent: this._onEvent.bind(this)
         });
-        return this._executeCommand(payload, callback);
+        const dataEvent = {
+            data : {
+                orh : this.randomOrh(),
+            }
+
+        }
+        callback()
+        // return this._executeCommand(payload, callback);
     }
 
     _executeCommand(payload: any, callback: Function) {
@@ -80,7 +87,6 @@ export default class SendMessage {
                 }
             }
         }, () => {
-            // cc.warn('timeOut');
         });
     }
 
@@ -97,5 +103,15 @@ export default class SendMessage {
     _onEvent(eventData: any) {
         this.eventManager.onEvent.apply(this.eventManager, arguments);
         // cc.warn(eventData);
+    }
+
+    randomOrh(){
+        const orhBase = [1,2,3,4,5,6];
+        const orh = [];
+        for (let i = 0; i < 6; i++){
+            const randomOrh = orhBase[Math.floor(Math.random() * (orhBase.length))]
+            orh.push(randomOrh);
+        }
+        return orh;
     }
 }

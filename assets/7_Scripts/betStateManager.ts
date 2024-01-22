@@ -54,10 +54,10 @@ export default class BetStateManager extends cc.Component {
         const resultString = `Oder Finish: ` + Data.instance.getOderFinish() + `\n`
             + `Buffalo Win: ` + buffalosWin + `\n`
             + `Bet Money Win: ` + Data.instance.getMoneyWin() + `K`;
-        this.bettingCurrent.forEach(element => {
-            const betItemController = element.getComponent('betItemController');
-            betItemController.resetBetValue();
-        });
+        // this.bettingCurrent.forEach(element => {
+        //     const betItemController = element.getComponent('betItemController');
+        //     betItemController.resetBetValue();
+        // });
         return resultString;
     }
 }

@@ -10,6 +10,7 @@ export default class uiManager extends cc.Component {
   @property(cc.Node) betPools: cc.Node = null;
   @property(cc.Node) betBackground: cc.Node = null;
   @property(cc.Node) startButton: cc.Node = null;
+  @property(cc.Node) autoBetButton: cc.Node = null;
 
   @property(cc.Label) popupLbl: cc.Label = null;
 
@@ -61,5 +62,6 @@ export default class uiManager extends cc.Component {
     this.betBackground.active = status;
     this.startButton.active = status;
     this.scrollNode.active = status;
+    this.autoBetButton.active = status;
   }
 }

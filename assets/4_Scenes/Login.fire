@@ -213,7 +213,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "Game SIze",
+    "_name": "Game Size",
     "_objFlags": 0,
     "_parent": {
       "__id__": 2
@@ -849,7 +849,7 @@
     "node": {
       "__id__": 5
     },
-    "_enabled": false,
+    "_enabled": true,
     "autoOrientation": true,
     "isPortrait": true,
     "canvas": {
