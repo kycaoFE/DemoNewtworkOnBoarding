@@ -43,14 +43,13 @@ export default class SendMessage {
         }, {
             onEvent: this._onEvent.bind(this)
         });
-        const dataEvent = {
-            data : {
-                orh : this.randomOrh(),
-            }
+        // const dataEvent = {
+        //     data : {
+        //         orh : this.randomOrh(),
+        //     }
 
-        }
-        callback()
-        // return this._executeCommand(payload, callback);
+        // }
+        return this._executeCommand(payload, callback);
     }
 
     _executeCommand(payload: any, callback: Function) {

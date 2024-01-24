@@ -1,4 +1,5 @@
 import { Data, ccData } from './data';
+import gaEventEmitter from "./cc-arcade-base/Scripts/Common/gaEventEmitter";
 const { ccclass, property } = cc._decorator;
 
 @ccclass
@@ -16,6 +17,7 @@ export default class betItemController extends cc.Component {
         this.betValue += Number(chipValueBet);
         this.setValueLabel(this.numBuffalos, this.oddValue, this.betValue);
         this.setColorButtonBackground(ccData.instance.yellow);
+        gaEventEmitter.instance.emit('canBet', true);
     }
 
     getBet(): string {
@@ -40,6 +42,7 @@ export default class betItemController extends cc.Component {
     }
 
     resetBetValue(){
+        gaEventEmitter.instance.emit('canBet', false);
         this.betValue = 0;
         this.setValueLabel(this.numBuffalos, this.oddValue, 0);
         this.setColorButtonBackground(ccData.instance.white);

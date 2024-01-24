@@ -3,7 +3,7 @@
 const { ccclass, property } = cc._decorator;
 
 @ccclass
-export default class NewClass extends cc.Component {
+export default class LoadingController extends cc.Component {
 
     @property(cc.ProgressBar) loadingBar: cc.ProgressBar = null;
     @property(cc.Node) loadingController: cc.Node = null;
@@ -13,17 +13,18 @@ export default class NewClass extends cc.Component {
 
     start() {
         this.loadingBar.progress = 0;
-        this.loadMainScreen();
+        this.preloadMainScene();
     }
 
     preloadMainScene() {
-        var isLoaded = false;
-        cc.director.preloadScene("MainScene", (completedCount, totalCount) => {
-            var progress = (completedCount / totalCount) * 100;
+        cc.director.preloadScene("MainScene", (completedCount, totalCount, item) => {
+            var progress = (completedCount / totalCount);
             this.loadingBar.progress = progress;
-            if (progress >= 0.9 && !isLoaded) {
-                isLoaded = true;
+        }, (error) => {
+            if (!error) {
                 this.loadMainScreen();
+            } else {
+                console.error(error);
             }
         });
     }

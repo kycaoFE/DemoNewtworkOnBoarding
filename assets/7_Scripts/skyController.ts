@@ -2,7 +2,7 @@ import gaEventEmitter from "./cc-arcade-base/Scripts/Common/gaEventEmitter";
 const {ccclass, property} = cc._decorator;
 
 @ccclass
-export default class NewClass extends cc.Component {
+export default class SkyController extends cc.Component {
 
     @property(cc.Node) clouds: cc.Node[] = [];
 

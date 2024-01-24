@@ -4,13 +4,14 @@ const CanvasScaleByOrientation = require('CanvasScaleByOrientation');
 const {ccclass, property} = cc._decorator;
 
 @ccclass
-export default class NewClass extends CanvasScaleByOrientation {
+export default class GameResize extends CanvasScaleByOrientation {
 
     private _visibleSize: cc.Size;
     @property(cc.Canvas) canvas: cc.Canvas =null;
 
     protected start(): void {
         this.onGameShow();
+        this.scaleCanvasByOrientation();
     }
     update(dt: number) {
         if (!this._visibleSize.equals(cc.view.getVisibleSize())) {

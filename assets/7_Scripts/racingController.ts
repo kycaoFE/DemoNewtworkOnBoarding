@@ -3,7 +3,7 @@ import gaEventEmitter from "./cc-arcade-base/Scripts/Common/gaEventEmitter";
 const { ccclass, property } = cc._decorator;
 
 @ccclass
-export default class NewClass extends cc.Component {
+export default class RacingController extends cc.Component {
 
     @property(cc.Node) buffalos: cc.Node[] = [];
     @property(cc.Label) distanceLabel: cc.Label = null;
@@ -18,12 +18,12 @@ export default class NewClass extends cc.Component {
     };
 
     private distanceScroll = 800;
-    private distanceScrollPrepare = 240;
+    private xPrepare = -5500;
 
     private isRacing: boolean = false;
 
     private buffalosOderFinish: Array<any> = [];
-    private layerSpeed: Array<number> = [0.7, 0.9];
+    private layerSpeed: Array<number> = [0.7, 0.9, 1, 1];
 
 
     protected onLoad(): void {
@@ -56,11 +56,11 @@ export default class NewClass extends cc.Component {
     }
 
     racing() {
-        // this.buffalosOderFinish = Data.instance.getOderFinish().split('');
-        Data.instance.randomOrh();
-        this.buffalosOderFinish = Data.instance.getOderFinish();
+        this.buffalosOderFinish = Data.instance.getOderFinish().split('');
+        // // Data.instance.randomOrh();
+        // this.buffalosOderFinish = Data.instance.getOderFinish();
         this.prepare();
-    }
+    }   
 
     getFastestBuffalo() {
         var fastestBuffalo = this.buffalos[0];
@@ -73,7 +73,7 @@ export default class NewClass extends cc.Component {
     }
 
     prepare() {
-        const durationPrepare = 1;
+        const durationPrepare = Data.instance.timePrepare;
         
         cc.tween(this.node)
             .by(durationPrepare, { x: -this.distanceScroll })
@@ -114,9 +114,11 @@ export default class NewClass extends cc.Component {
     }
 
     prepareNextRound() {
+        cc.warn(this.node.x);
         cc.tween(this.node)
-            .by(1, { x: -this.distanceScrollPrepare })
+            .to(Data.instance.timePrepare, { x:  this.xPrepare})
             .call(() => {
+                cc.warn(this.node.x);
                 this.node.x = -200;
                 gaEventEmitter.instance.emit('prepareDone')
             })
@@ -125,7 +127,7 @@ export default class NewClass extends cc.Component {
         this.layers.forEach((layer, index) => {
             const distance = -200 * this.layerSpeed[index]
             cc.tween(layer)
-                .by(1, { x: distance })
+                .by(Data.instance.timePrepare, { x: distance })
                 .call(() => {
                     Data.instance.layerDistance[index] -= distance;
                 })

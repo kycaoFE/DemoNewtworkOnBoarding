@@ -3,12 +3,12 @@ import gaEventEmitter from "./cc-arcade-base/Scripts/Common/gaEventEmitter";
 const { ccclass, property } = cc._decorator;
 
 @ccclass
-export default class NewClass extends cc.Component {
+export default class LayerController extends cc.Component {
 
     @property(cc.Prefab) layer: cc.Prefab = null;
     @property indexLayer: number;
 
-    @property _positionSpawn: number;
+    @property _positionSpawn: number = 960;
 
     private count: number = 1;
     private numberChildren = 7;
@@ -22,7 +22,6 @@ export default class NewClass extends cc.Component {
         gaEventEmitter.instance.registerEvent('prepareDone', this.spawnLayer.bind(this));
     }
     spawnLayer() {
-        cc.warn('spawn');
         const time = Math.ceil(Data.instance.layerDistance[this.indexLayer] / this._positionSpawn);
 
         for (let i = 0; i < time; i++) {
